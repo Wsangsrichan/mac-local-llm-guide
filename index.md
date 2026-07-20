@@ -64,6 +64,24 @@ curl http://localhost:11434/api/generate -d '{
 }'
 ```
 
+
+---
+
+## ❓ Ollama vs vLLM — ทำไมไม่ใช้ vLLM?
+
+vLLM เป็นเครื่องมือที่ยอดเยี่ยมสำหรับ **production serving บน GPU server** — แต่ออกแบบมาสำหรับ NVIDIA CUDA เท่านั้น:
+
+| | **vLLM** | **Ollama** |
+|---|---------|----------|
+| Apple Silicon (M1-M5) | ❌ ไม่รองรับ (ต้องใช้ CUDA) | ✅ Native Metal acceleration |
+| NVIDIA GPU | ✅ ดีที่สุด | ✅ รองรับ |
+| Continuous batching | ✅ | ❌ (ไม่จำเป็นสำหรับ local) |
+| Production throughput | ✅ สูงมาก | ❌ |
+| ติดตั้งบน Mac | ❌ ซับซ้อนมาก / แทบใช้ไม่ได้ | ✅ `brew install ollama` |
+| เหมาะกับ | Data center, GPU cluster | 🏆 **Local development บน Mac** |
+
+> 💡 **สรุป:** vLLM สำหรับ server, Ollama สำหรับ local dev — ใช้คนละสถานการณ์กัน ถ้าคุณรันบน Mac → Ollama คือคำตอบ
+
 ---
 
 ## 🎯 โมเดลแนะนำ แยกตาม Use Case
@@ -75,6 +93,7 @@ curl http://localhost:11434/api/generate -d '{
 | **Qwen 2.5 Coder** | 7B / 14B | `ollama pull qwen2.5-coder:14b` | 🏆 Best overall — เขียนโค้ด, refactor, generate |
 | **DeepSeek Coder V2** | 16B | `ollama pull deepseek-coder-v2:16b` | อัลกอริทึมซับซ้อน, multi-file |
 | **Codestral** | 22B | `ollama pull codestral:22b` | เติมโค้ด, autocomplete |
+| **Kimi K2** | latest | `ollama pull kimi-k2:latest` | coding/reasoning แข็งแกร่งจาก Moonshot AI |
 | **CodeGemma** | 7B | `ollama pull codegemma:7b` | เบา เร็ว — quick tasks |
 
 ### 🔍 Code Review
@@ -83,6 +102,7 @@ curl http://localhost:11434/api/generate -d '{
 |-------|------|-------------|---------|
 | **Qwen 2.5 Coder** | 14B | `ollama pull qwen2.5-coder:14b` | 🏆 Review โค้ด, หา bug, แนะนำ improvement |
 | **DeepSeek Coder V2** | 16B | `ollama pull deepseek-coder-v2:16b` | deep analysis, security patterns |
+| **Kimi K2** | latest | `ollama pull kimi-k2:latest` | reasoning ดีมาก — หา logic bugs |
 | **Llama 3.1** | 8B | `ollama pull llama3.1:8b` | General review, อ่านได้หลายภาษา |
 
 ### 🔒 Security Scanning
@@ -115,6 +135,7 @@ curl http://localhost:11434/api/generate -d '{
 |-------|------|-------------|---------|
 | **Qwen 2.5** | 14B | `ollama pull qwen2.5:14b` | 🏆 All-around best สำหรับ DevOps |
 | **Llama 3.1** | 8B | `ollama pull llama3.1:8b` | เร็ว เบา — everyday tasks |
+| **Kimi K2** | latest | `ollama pull kimi-k2:latest` | ทดแทน GPT-4 ได้ดีบน local |
 | **Phi-4** | 14B | `ollama pull phi4:14b` | reasoning ดีมาก แม่นยำ |
 
 ---
@@ -141,6 +162,7 @@ ollama pull codestral:22b
 ollama pull mistral:7b
 ollama pull codegemma:7b
 ollama pull phi4:14b
+ollama pull kimi-k2:latest
 ```
 
 > ⚠️ **พื้นที่ดิสก์:** Qwen 2.5 Coder 14B (~9GB) + Qwen 2.5 14B (~9GB) + Llama 3.1 8B (~5GB) + DeepSeek Coder V2 16B (~10GB) = **~33GB รวม**
