@@ -22,7 +22,7 @@
 
 ```bash
 brew install ollama
-ollama pull qwen2.5-coder:14b
-ollama pull qwen2.5:14b
-ollama run qwen2.5-coder:14b "เขียน Dockerfile สำหรับ React app ที่ใช้ nginx"
+ollama pull qwen3.6:27b
+ollama pull gemma4:12b
+ollama run qwen3.6:27b "เขียน Dockerfile สำหรับ React app ที่ใช้ nginx"
 ```

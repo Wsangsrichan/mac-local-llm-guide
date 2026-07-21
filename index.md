@@ -39,7 +39,7 @@ brew install ollama
 ollama serve
 
 # ทดสอบ — รันโมเดลแรก
-ollama run llama3.2:3b
+ollama run gemma4:12b
 ```
 
 ### คำสั่ง Ollama พื้นฐาน
@@ -58,7 +58,7 @@ ollama show <model>      # ดูรายละเอียดโมเดล
 ```bash
 # HTTP API — รันที่ localhost:11434
 curl http://localhost:11434/api/generate -d '{
-  "model": "qwen2.5-coder:7b",
+  "model": "qwen3.6:27b",
   "prompt": "เขียน Dockerfile สำหรับ Node.js app",
   "stream": false
 }'
@@ -90,53 +90,53 @@ vLLM เป็นเครื่องมือที่ยอดเยี่ย
 
 | โมเดล | Size | คำสั่งติดตั้ง | เหมาะกับ |
 |-------|------|-------------|---------|
-| **Qwen 2.5 Coder** | 7B / 14B | `ollama pull qwen2.5-coder:14b` | 🏆 Best overall — เขียนโค้ด, refactor, generate |
-| **DeepSeek Coder V2** | 16B | `ollama pull deepseek-coder-v2:16b` | อัลกอริทึมซับซ้อน, multi-file |
-| **Codestral** | 22B | `ollama pull codestral:22b` | เติมโค้ด, autocomplete |
-| **Kimi K2** | latest | `ollama pull kimi-k2:latest` | coding/reasoning แข็งแกร่งจาก Moonshot AI |
-| **CodeGemma** | 7B | `ollama pull codegemma:7b` | เบา เร็ว — quick tasks |
+| **Qwen 3.6** | 27B | `ollama pull qwen3.6:27b` | 🏆 Best overall — เขียนโค้ด, refactor, generate, agentic coding |
+| **DeepSeek R1** | 32B | `ollama pull deepseek-r1:32b` | อัลกอริทึมซับซ้อน, multi-file, deep reasoning |
+| **Mistral Small 3.2** | 24B | `ollama pull mistral-small3.2:24b` | เติมโค้ด, autocomplete, instruction-following |
+| **Granite 4.1** | 30B | `ollama pull granite4.1:30b` | coding/reasoning แข็งแกร่งจาก IBM |
+| **Gemma 4** | 12B | `ollama pull gemma4:12b` | เบา เร็ว — quick tasks, agentic workflows |
 
 ### 🔍 Code Review
 
 | โมเดล | Size | คำสั่งติดตั้ง | เหมาะกับ |
 |-------|------|-------------|---------|
-| **Qwen 2.5 Coder** | 14B | `ollama pull qwen2.5-coder:14b` | 🏆 Review โค้ด, หา bug, แนะนำ improvement |
-| **DeepSeek Coder V2** | 16B | `ollama pull deepseek-coder-v2:16b` | deep analysis, security patterns |
-| **Kimi K2** | latest | `ollama pull kimi-k2:latest` | reasoning ดีมาก — หา logic bugs |
-| **Llama 3.1** | 8B | `ollama pull llama3.1:8b` | General review, อ่านได้หลายภาษา |
+| **Qwen 3.6** | 27B | `ollama pull qwen3.6:27b` | 🏆 Review โค้ด, หา bug, แนะนำ improvement |
+| **DeepSeek R1** | 32B | `ollama pull deepseek-r1:32b` | deep analysis, security patterns, reasoning |
+| **Granite 4.1** | 30B | `ollama pull granite4.1:30b` | reasoning ดีมาก — หา logic bugs |
+| **Gemma 4** | 12B | `ollama pull gemma4:12b` | General review, อ่านได้หลายภาษา |
 
 ### 🔒 Security Scanning
 
 | โมเดล | Size | คำสั่งติดตั้ง | เหมาะกับ |
 |-------|------|-------------|---------|
-| **Qwen 2.5 Coder** | 14B | `ollama pull qwen2.5-coder:14b` | หา SQL injection, XSS, hardcoded secrets |
-| **DeepSeek Coder V2** | 16B | `ollama pull deepseek-coder-v2:16b` | วิเคราะห์ dependency, CVE patterns |
-| **Llama 3.1** | 8B | `ollama pull llama3.1:8b` | หาช่องโหว่ใน config, IAM policy |
+| **Qwen 3.6** | 27B | `ollama pull qwen3.6:27b` | หา SQL injection, XSS, hardcoded secrets |
+| **DeepSeek R1** | 32B | `ollama pull deepseek-r1:32b` | วิเคราะห์ dependency, CVE patterns |
+| **Gemma 4** | 12B | `ollama pull gemma4:12b` | หาช่องโหว่ใน config, IAM policy |
 
 ### ☸️ Kubernetes Analysis
 
 | โมเดล | Size | คำสั่งติดตั้ง | เหมาะกับ |
 |-------|------|-------------|---------|
-| **Qwen 2.5** | 14B | `ollama pull qwen2.5:14b` | 🏆 วิเคราะห์ YAML, หา misconfiguration |
-| **Llama 3.1** | 8B | `ollama pull llama3.1:8b` | อธิบาย error, แนะนำ troubleshooting |
-| **Mistral** | 7B | `ollama pull mistral:7b` | เร็ว — quick diagnostics |
+| **Qwen 3.6** | 27B | `ollama pull qwen3.6:27b` | 🏆 วิเคราะห์ YAML, หา misconfiguration |
+| **Gemma 4** | 12B | `ollama pull gemma4:12b` | อธิบาย error, แนะนำ troubleshooting |
+| **Nemotron 3** | 33B | `ollama pull nemotron3:33b` | เร็ว — quick diagnostics, reasoning |
 
 ### 📊 Elastic / Grafana / Log Analysis
 
 | โมเดล | Size | คำสั่งติดตั้ง | เหมาะกับ |
 |-------|------|-------------|---------|
-| **Qwen 2.5** | 14B | `ollama pull qwen2.5:14b` | 🏆 วิเคราะห์ log patterns, anomaly detection |
-| **Llama 3.1** | 8B | `ollama pull llama3.1:8b` | สรุป error, แนะนำแก้ไข |
-| **Mistral** | 7B | `ollama pull mistral:7b` | grep แบบ AI, หา correlation |
+| **Qwen 3.6** | 27B | `ollama pull qwen3.6:27b` | 🏆 วิเคราะห์ log patterns, anomaly detection |
+| **Gemma 4** | 12B | `ollama pull gemma4:12b` | สรุป error, แนะนำแก้ไข |
+| **Mistral Small 3.2** | 24B | `ollama pull mistral-small3.2:24b` | grep แบบ AI, หา correlation |
 
 ### 🧠 General DevOps Assistant
 
 | โมเดล | Size | คำสั่งติดตั้ง | เหมาะกับ |
 |-------|------|-------------|---------|
-| **Qwen 2.5** | 14B | `ollama pull qwen2.5:14b` | 🏆 All-around best สำหรับ DevOps |
-| **Llama 3.1** | 8B | `ollama pull llama3.1:8b` | เร็ว เบา — everyday tasks |
-| **Kimi K2** | latest | `ollama pull kimi-k2:latest` | ทดแทน GPT-4 ได้ดีบน local |
-| **Phi-4** | 14B | `ollama pull phi4:14b` | reasoning ดีมาก แม่นยำ |
+| **Qwen 3.6** | 27B | `ollama pull qwen3.6:27b` | 🏆 All-around best สำหรับ DevOps |
+| **Gemma 4** | 12B | `ollama pull gemma4:12b` | เร็ว เบา — everyday tasks |
+| **Granite 4.1** | 30B | `ollama pull granite4.1:30b` | ทดแทน GPT-4 ได้ดีบน local |
+| **Nemotron 3** | 33B | `ollama pull nemotron3:33b` | reasoning ดีมาก แม่นยำ — NVIDIA |
 
 ---
 
@@ -147,25 +147,24 @@ vLLM เป็นเครื่องมือที่ยอดเยี่ย
 brew install ollama
 
 # ดาวน์โหลดโมเดลแนะนำ (เลือกตามต้องการ)
-# ★★★ ต้องมี (Best all-rounder)
-ollama pull qwen2.5-coder:14b
+# ★★★ ต้องมี (Best all-rounder — Coding + DevOps)
+ollama pull qwen3.6:27b
 
-# ★★★ ต้องมี (General DevOps)
-ollama pull qwen2.5:14b
+# ★★★ ต้องมี (Deep reasoning + Code review)
+ollama pull deepseek-r1:32b
 
-# ★★ แนะนำ (สำรอง)
-ollama pull llama3.1:8b
-ollama pull deepseek-coder-v2:16b
+# ★★ แนะนำ (เบา เร็ว — everyday tasks)
+ollama pull gemma4:12b
+
+# ★★ แนะนำ (Code autocomplete + instruction-following)
+ollama pull mistral-small3.2:24b
 
 # ★ ตัวเลือกเพิ่มเติม
-ollama pull codestral:22b
-ollama pull mistral:7b
-ollama pull codegemma:7b
-ollama pull phi4:14b
-ollama pull kimi-k2:latest
+ollama pull granite4.1:30b
+ollama pull nemotron3:33b
 ```
 
-> ⚠️ **พื้นที่ดิสก์:** Qwen 2.5 Coder 14B (~9GB) + Qwen 2.5 14B (~9GB) + Llama 3.1 8B (~5GB) + DeepSeek Coder V2 16B (~10GB) = **~33GB รวม**
+> ⚠️ **พื้นที่ดิสก์:** Qwen 3.6 27B (~16GB) + DeepSeek R1 32B (~20GB) + Gemma 4 12B (~8GB) + Mistral Small 3.2 24B (~15GB) = **~59GB รวม** (แนะนำติดตั้งเฉพาะที่จำเป็น)
 
 ---
 
@@ -173,27 +172,38 @@ ollama pull kimi-k2:latest
 
 ### VS Code + Continue.dev
 
-Continue.dev เป็น extension ฟรีที่เชื่อม VS Code กับ Ollama:
+Continue.dev เป็น extension ฟรีที่เชื่อม VS Code กับ Ollama (เวอร์ชันล่าสุด mid-2026):
 
 ```bash
 # ติดตั้ง VS Code extension
 code --install-extension Continue.continue
 ```
 
-Config `~/.continue/config.json`:
+Config `~/.continue/config.json` (ใช้ format ล่าสุด 2026):
 ```json
 {
   "models": [
     {
-      "title": "Qwen 2.5 Coder 14B",
+      "title": "Qwen 3.6 27B",
       "provider": "ollama",
-      "model": "qwen2.5-coder:14b"
+      "model": "qwen3.6:27b",
+      "roles": ["chat", "autocomplete"]
+    },
+    {
+      "title": "DeepSeek R1 32B",
+      "provider": "ollama",
+      "model": "deepseek-r1:32b",
+      "roles": ["chat"]
     }
   ],
   "tabAutocompleteModel": {
-    "title": "Codestral 22B",
+    "title": "Mistral Small 3.2 24B",
     "provider": "ollama",
-    "model": "codestral:22b"
+    "model": "mistral-small3.2:24b"
+  },
+  "embeddingsProvider": {
+    "provider": "ollama",
+    "model": "nomic-embed-text"
   }
 }
 ```
@@ -203,7 +213,7 @@ Config `~/.continue/config.json`:
 ```bash
 # ฟังก์ชันสำหรับถาม AI จาก terminal
 ai() {
-  ollama run qwen2.5:14b "$@"
+  ollama run qwen3.6:27b "$@"
 }
 
 # ใช้วิเคราะห์ command output
@@ -245,7 +255,7 @@ orbctl run -d -p 3000:8080 \
 
 ```bash
 # ใช้ AI วิเคราะห์ manifest
-cat deployment.yaml | ollama run qwen2.5:14b \
+cat deployment.yaml | ollama run qwen3.6:27b \
   "วิเคราะห์ Kubernetes manifest นี้:
    1. หา security issues (privileged containers, hostPath, etc.)
    2. หา resource limits ที่อาจทำให้เกิดปัญหา
@@ -257,7 +267,7 @@ cat deployment.yaml | ollama run qwen2.5:14b \
 ```bash
 # ดึง logs แล้วให้ AI วิเคราะห์
 curl -s "localhost:9200/_search?q=ERROR&size=10" | \
-  ollama run qwen2.5:14b \
+  ollama run qwen3.6:27b \
   "สรุป error patterns จาก Elasticsearch logs นี้
    และแนะนำวิธีการแก้ไข"
 ```
@@ -266,7 +276,7 @@ curl -s "localhost:9200/_search?q=ERROR&size=10" | \
 
 ```bash
 # Review PR diff
-git diff main...feature-branch | ollama run qwen2.5-coder:14b \
+git diff main...feature-branch | ollama run qwen3.6:27b \
   "Review code diff นี้:
    1. หา bugs และ logic errors
    2. หา security vulnerabilities
@@ -278,7 +288,7 @@ git diff main...feature-branch | ollama run qwen2.5-coder:14b \
 
 ```bash
 # ตรวจสอบ Terraform
-find . -name "*.tf" -exec cat {} + | ollama run qwen2.5:14b \
+find . -name "*.tf" -exec cat {} + | ollama run qwen3.6:27b \
   "วิเคราะห์ Terraform code:
    1. S3 buckets — มี public access ไหม?
    2. Security groups — มี 0.0.0.0/0 inbound ไหม?
@@ -286,13 +296,151 @@ find . -name "*.tf" -exec cat {} + | ollama run qwen2.5:14b \
    4. Secrets — มี hardcoded credentials ไหม?"
 ```
 
-### 5. Dockerfile Optimization
+### 5. Docker/Container Analysis
 
 ```bash
 # วิเคราะห์ Dockerfile
-ollama run qwen2.5-coder:14b "รีวิว Dockerfile นี้
+ollama run qwen3.6:27b "รีวิว Dockerfile นี้
   หา security issues และ optimization opportunities:
   $(cat Dockerfile)"
+
+# วิเคราะห์ docker-compose
+ollama run qwen3.6:27b "วิเคราะห์ docker-compose.yml:
+  $(cat docker-compose.yml)
+  1. หา security issues (privileged mode, host mounts)
+  2. ตรวจสอบ network configuration
+  3. แนะนำ optimization"
+```
+
+### 6. 🤖 AI Agent Pipeline — Local Agent อัตโนมัติ
+
+```bash
+# สร้าง AI agent ที่ทำงานอัตโนมัติผ่าน shell
+# ตัวอย่าง: agent ตรวจสอบ health check และแจ้งเตือน
+
+cat << 'EOF' > /tmp/agent-health.sh
+#!/bin/bash
+# AI Agent: ตรวจสอบ service health และแนะนำวิธีแก้
+
+ENDPOINTS=("http://localhost:8080/health" "http://localhost:3000/api/status")
+
+for url in "${ENDPOINTS[@]}"; do
+  response=$(curl -s -o /dev/null -w "%{http_code}" "$url" 2>/dev/null)
+  if [ "$response" != "200" ]; then
+    echo "❌ $url → HTTP $response"
+    echo "วิเคราะห์โดย AI..."
+    ollama run qwen3.6:27b "Service health check failed at $url (HTTP $response).
+      Suggest troubleshooting steps and possible root causes for a DevOps engineer."
+  fi
+done
+EOF
+chmod +x /tmp/agent-health.sh
+```
+
+### 7. 📝 Meeting Summary & Document Generation
+
+```bash
+# สรุปบันทึกการประชุมจาก transcript
+ollama run qwen3.6:27b "สรุปบันทึกการประชุมจาก transcript นี้:
+  $(cat meeting-transcript.txt)
+  
+  กรุณาสรุป:
+  1. หัวข้อหลักที่พูดคุย
+  2. ข้อตัดสินใจ (Decisions)
+  3. Action items พร้อมผู้รับผิดชอบ
+  4. สรุปเป็น bullet points ภาษาไทย"
+
+# สร้าง RCA (Root Cause Analysis) document จาก incident log
+ollama run qwen3.6:27b "จาก incident log นี้ สร้าง RCA document:
+  $(cat incident.log)
+  
+  ประกอบด้วย:
+  - Timeline ของเหตุการณ์
+  - Root cause
+  - Impact analysis
+  - Preventive measures"
+```
+
+### 8. 🧪 Generate Unit Tests
+
+```bash
+# สร้าง unit tests จาก source code
+ollama run qwen3.6:27b "สร้าง unit tests สำหรับฟังก์ชันนี้:
+  \`\`\`python
+  $(cat src/auth.py)
+  \`\`\`
+  ใช้ pytest framework, ครอบคลุม:
+  - Happy path
+  - Edge cases
+  - Error handling
+  - Mock external dependencies"
+
+# สร้าง test ทั้งไฟล์พร้อมวัด coverage
+find src/ -name "*.py" | while read f; do
+  echo "=== Generating tests for $f ==="
+  ollama run qwen3.6:27b "Generate comprehensive pytest unit tests for:
+    \`\`\`python
+    $(cat "$f")
+    \`\`\`" > "tests/test_$(basename $f)"
+done
+```
+
+### 9. 🔄 Multi-Model Pipeline — หลายโมเดลทำงานต่อกัน
+
+```bash
+# Pipeline: Code → Review → Fix → Security Scan
+# ใช้หลายโมเดลทำงานต่อเนื่องกัน
+
+CODE_FILE="src/main.py"
+
+# Step 1: Qwen 3.6 — Code Review
+REVIEW=$(ollama run qwen3.6:27b "Review this code for bugs and issues:
+  \`\`\`python
+  $(cat $CODE_FILE)
+  \`\`\`")
+
+echo "=== Code Review ==="
+echo "$REVIEW"
+
+# Step 2: DeepSeek R1 — Deep Reasoning & Logic Check
+LOGIC_CHECK=$(ollama run deepseek-r1:32b "Analyze the logic and edge cases:
+  \`\`\`python
+  $(cat $CODE_FILE)
+  \`\`\`")
+
+echo "=== Logic Analysis ==="
+echo "$LOGIC_CHECK"
+
+# Step 3: Gemma 4 — Security Scan (เร็ว)
+SECURITY_SCAN=$(ollama run gemma4:12b "Scan for security vulnerabilities:
+  \`\`\`python
+  $(cat $CODE_FILE)
+  \`\`\`")
+
+echo "=== Security Scan ==="
+echo "$SECURITY_SCAN"
+```
+
+### 10. 🚀 Shell Autocomplete — AI ช่วยเติม Command
+
+```bash
+# AI-powered shell autocomplete
+# เพิ่มใน ~/.bashrc หรือ ~/.zshrc
+
+_ai_complete() {
+  local partial="${COMP_LINE}"
+  local suggestion=$(ollama run gemma4:12b \
+    "Suggest a complete shell command. Current partial: '$partial'.
+    Reply with ONLY the completed command, no explanation." 2>/dev/null)
+  COMPREPLY=("$suggestion")
+}
+
+# เปิดใช้งานด้วย Ctrl+F (หรือ bind ตามที่ต้องการ)
+bind -x '"\C-f": _ai_complete'
+
+# ตัวอย่างการใช้งาน:
+# พิมพ์ "kubectl get po" แล้วกด Ctrl+F
+# AI จะแนะนำ: "kubectl get pods --all-namespaces | grep Error"
 ```
 
 ---
@@ -306,11 +454,11 @@ MLX เป็น framework ของ Apple สำหรับรัน ML บน
 pip install mlx mlx-lm
 
 # รันโมเดลผ่าน MLX (เร็วกว่า Ollama สำหรับบางโมเดล)
-mlx_lm.generate --model mlx-community/Qwen2.5-Coder-7B-4bit \
+mlx_lm.generate --model mlx-community/Qwen3.6-27B-4bit \
   --prompt "เขียนฟังก์ชัน Python สำหรับ validate Kubernetes YAML"
 
 # รันเป็น server แบบ OpenAI API
-mlx_lm.server --model mlx-community/Qwen2.5-Coder-7B-4bit
+mlx_lm.server --model mlx-community/Qwen3.6-27B-4bit
 ```
 
 > 💡 **เมื่อไหร่ควรใช้ MLX:** สำหรับโมเดลที่ใช้บ่อยมาก ๆ และต้องการความเร็วสูงสุด  
@@ -322,11 +470,12 @@ mlx_lm.server --model mlx-community/Qwen2.5-Coder-7B-4bit
 
 | โมเดล | Quant | Tokens/s | RAM | การใช้งาน |
 |-------|-------|----------|-----|----------|
-| Qwen 2.5 Coder 7B | Q4_K_M | ~45 tok/s | ~5 GB | ทั่วไป |
-| Qwen 2.5 Coder 14B | Q4_K_M | ~28 tok/s | ~9 GB | **แนะนำ** |
-| DeepSeek Coder V2 16B | Q4_K_M | ~22 tok/s | ~10 GB | งานหนัก |
-| Codestral 22B | Q4_K_M | ~16 tok/s | ~14 GB | autocomplete |
-| Qwen 2.5 32B | Q4_K_M | ~12 tok/s | ~21 GB | analysis ลึก |
+| Gemma 4 12B | Q4_K_M | ~38 tok/s | ~8 GB | ทั่วไป, เร็ว |
+| Qwen 3.6 27B | Q4_K_M | ~20 tok/s | ~16 GB | 🏆 **แนะนำ** — coding + DevOps |
+| Mistral Small 3.2 24B | Q4_K_M | ~18 tok/s | ~15 GB | autocomplete, instruction |
+| Granite 4.1 30B | Q4_K_M | ~13 tok/s | ~18 GB | reasoning, code review |
+| DeepSeek R1 32B | Q4_K_M | ~14 tok/s | ~20 GB | deep reasoning, algorithms |
+| Nemotron 3 33B | Q4_K_M | ~12 tok/s | ~20 GB | multimodal, analysis ลึก |
 
 ---
 
@@ -364,10 +513,10 @@ mlx_lm.server --model mlx-community/Qwen2.5-Coder-7B-4bit
 # 1. ติดตั้ง Ollama
 brew install ollama
 
-# 2. ดาวน์โหลดโมเดลหลัก
-ollama pull qwen2.5-coder:14b
-ollama pull qwen2.5:14b
+# 2. ดาวน์โหลดโมเดลหลัก (เลือกเพียง 1-2 ตัว)
+ollama pull qwen3.6:27b
+ollama pull gemma4:12b
 
 # 3. ทดสอบ
-ollama run qwen2.5-coder:14b "เขียน Dockerfile สำหรับ React app ที่ใช้ nginx"
+ollama run qwen3.6:27b "เขียน Dockerfile สำหรับ React app ที่ใช้ nginx"
 ```
