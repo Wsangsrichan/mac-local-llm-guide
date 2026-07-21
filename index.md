@@ -445,6 +445,248 @@ bind -x '"\C-f": _ai_complete'
 
 ---
 
+## 🤖 Hermes Agent + Local LLM
+
+### Hermes Agent คืออะไร
+
+**Hermes Agent** เป็น open-source AI agent framework ที่พัฒนาโดย [Nous Research](https://hermes-agent.nousresearch.com/) — รันบน terminal ได้เต็มรูปแบบ สามารถเชื่อมต่อกับ local LLM ผ่าน Ollama เพื่อทำงานอัตโนมัติแบบ Agentic (คิด → ตัดสินใจ → ลงมือทำ → ตรวจสอบผลลัพธ์)
+
+แตกต่างจากการเรียก LLM แบบธรรมดา (ถาม→ตอบ) เพราะ Hermes มีความสามารถ:
+- 🛠️ **Tools** — ใช้ shell, อ่าน/เขียนไฟล์, เข้าถึงระบบ ได้โดยตรง
+- 🔗 **Multi-step reasoning** — คิดเป็นขั้นตอน แก้ปัญหาซับซ้อน
+- 🔄 **Self-correcting** — ตรวจสอบผลลัพธ์ตัวเอง แก้ไขถ้าผิดพลาด
+- 📅 **Scheduled tasks** — ทำงานตามเวลา (cron)
+- 🧩 **Extensible** — เพิ่ม custom tools/plugins ได้ตามต้องการ
+
+> 💡 **TL;DR:** Hermes = AI ที่ไม่ใช่แค่ตอบคำถาม แต่ **ทำงานให้คุณได้จริง ๆ** — review PR, วิเคราะห์ logs, ตรวจสอบ security, แจ้งเตือนอัตโนมัติ
+
+---
+
+### วิธีตั้งค่า Hermes + Local LLM
+
+```bash
+# 1. ติดตั้ง Hermes Agent
+curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash
+
+# 2. ตั้งค่าให้ใช้ Ollama เป็น provider (local LLM)
+hermes config set provider ollama
+hermes config set model qwen3.6:27b
+
+# 3. ตรวจสอบการตั้งค่า
+hermes config show
+
+# 4. ทดสอบ Hermes
+hermes "เขียน script bash สำหรับ backup PostgreSQL database ทุกวัน"
+```
+
+#### ตั้งค่าโมเดลอื่นตาม Use Case
+
+```bash
+# Deep reasoning + โค้ดซับซ้อน → DeepSeek R1
+hermes config set model deepseek-r1:32b
+
+# งานเร็ว เบา → Gemma 4
+hermes config set model gemma4:12b
+
+# Best all-rounder → Qwen 3.6 (แนะนำเริ่มต้น)
+hermes config set model qwen3.6:27b
+```
+
+---
+
+### Use Cases — Hermes + Local LLM สำหรับ DevOps
+
+#### 🔄 1. Automated PR Review
+
+Hermes อ่าน PR diff → local LLM review → post comment อัตโนมัติ:
+
+```bash
+# Review PR และโพสต์ comment
+hermes "อ่านไฟล์ที่เปลี่ยนแปลงใน PR นี้:
+  \`\`\`diff
+  $(git diff main...feature-branch)
+  \`\`\`
+  ตรวจสอบ: bugs, security issues, performance problems, naming conventions
+  แล้วสรุปเป็น review comment แบบกระชับ เป็นภาษาไทย"
+```
+
+#### 📊 2. Log Analysis Agent
+
+Hermes อ่าน logs → วิเคราะห์ → แจ้งเตือนอัตโนมัติ:
+
+```bash
+# วิเคราะห์ logs แบบ real-time
+tail -f /var/log/app.log | while read line; do
+  echo "$line" | hermes "วิเคราะห์ log บรรทัดนี้
+    ถ้าเป็น ERROR/CRITICAL → สรุปปัญหา แนะนำวิธีแก้
+    ถ้าปกติ → ไม่ต้องตอบอะไร" >> /tmp/ai-log-report.txt
+done
+```
+
+#### 🚀 3. Deployment Assistant
+
+Hermes ช่วยตรวจสอบก่อน deploy (checklist, health check):
+
+```bash
+# Pre-deployment checklist
+hermes "นี่คือ deployment plan สำหรับ production:
+  \`\`\`yaml
+  $(cat deploy-plan.yaml)
+  \`\`\`
+  ตรวจสอบ:
+  1. Rollback strategy พร้อมหรือไม่
+  2. Health check endpoints ถูกต้องไหม
+  3. Environment variables ครบถ้วนไหม
+  4. Database migration — มี breaking changes ไหม
+  5. มี single point of failure ไหม"
+```
+
+#### 🐳 4. Docker/K8s Troubleshooting
+
+Hermes อ่าน error → วิเคราะห์ root cause → แนะนำแก้ไข:
+
+```bash
+# วิเคราะห์ Kubernetes error
+kubectl describe pod broken-pod | hermes "วิเคราะห์ pod นี้:
+  - หา root cause ของปัญหา
+  - แนะนำวิธีแก้ไขทีละขั้นตอน
+  - ระบุว่าควรตรวจสอบอะไรเพิ่มเติม"
+
+# วิเคราะห์ Docker build failure
+docker build . 2>&1 | hermes "วิเคราะห์ Docker build error นี้
+  แนะนำวิธีแก้ไข และ optimization opportunities"
+```
+
+#### 📝 5. Daily Standup Generator
+
+Hermes อ่าน git log → สรุปงานประจำวัน:
+
+```bash
+# สร้าง daily standup จาก git history
+git log --since="1 day ago" --oneline | hermes "จาก git log นี้
+  สร้าง daily standup report (ภาษาไทย):
+  1. What I did yesterday
+  2. What I plan to do today
+  3. Blockers (ถ้ามี)"
+```
+
+#### 🔐 6. Security Audit Pipeline
+
+Hermes สแกน IaC → local LLM วิเคราะห์ → report:
+
+```bash
+# สแกน Terraform security
+find . -name "*.tf" -exec cat {} + | hermes "วิเคราะห์ Terraform code:
+  1. S3 buckets — public access? encryption?
+  2. Security groups — 0.0.0.0/0 inbound?
+  3. IAM policies — overly permissive?
+  4. Secrets — hardcoded credentials?
+  5. สรุปความเสี่ยง เรียงตาม severity สูง→ต่ำ"
+
+# สแกน Dockerfile security
+hermes "ตรวจสอบ Dockerfile นี้ตาม CIS Docker Benchmark:
+  \`\`\`dockerfile
+  $(cat Dockerfile)
+  \`\`\`
+  รายงานเฉพาะ issues ที่พบ พร้อมวิธีแก้ไข"
+```
+
+#### 🧪 7. Test Generation
+
+Hermes อ่าน source → สร้าง unit tests:
+
+```bash
+# สร้าง unit tests อัตโนมัติ
+hermes "อ่าน source code นี้และสร้าง comprehensive unit tests:
+  \`\`\`python
+  $(cat src/api_handler.py)
+  \`\`\`
+  ใช้ pytest framework ครอบคลุม:
+  - Happy path, edge cases, error handling
+  - Mock external dependencies
+  - Parameterized tests สำหรับ input หลายรูปแบบ"
+```
+
+#### ⏰ 8. Scheduled Tasks (Cron Jobs)
+
+Hermes cron + local LLM สำหรับงานประจำ:
+
+```bash
+# ตรวจสอบ health ทุก 30 นาที
+hermes cron create \
+  --name "health-check" \
+  --schedule "30m" \
+  --prompt "curl http://localhost:8080/health และ http://localhost:3000/api/status
+    ถ้า endpoint ไหนไม่ตอบ 200 → วิเคราะห์สาเหตุและแจ้งเตือน"
+
+# สร้าง report ทุกวัน 9:00 น.
+hermes cron create \
+  --name "daily-report" \
+  --schedule "24h" \
+  --at "09:00" \
+  --prompt "อ่าน logs จากเมื่อวานจาก /var/log/app/*
+    สรุป: errors ที่พบ, throughput, response time trends
+    แนะนำสิ่งที่ควรปรับปรุง"
+
+# ดู cron jobs ทั้งหมด
+hermes cron list
+```
+
+---
+
+### Example: Automated Log Monitor with Hermes
+
+ตัวอย่างการตั้งค่า Hermes ให้ตรวจสอบ logs อัตโนมัติทุก 30 นาที:
+
+```bash
+# สร้าง cron job ให้ Hermes ตรวจสอบ logs ทุก 30 นาที
+hermes cron create \
+  --name "log-monitor" \
+  --schedule "30m" \
+  --prompt "อ่าน logs จาก /var/log/app.log (30 นาทีล่าสุด).
+    ถ้าเจอ ERROR หรือ CRITICAL → สรุปปัญหาและแนะนำวิธีแก้
+    ถ้าเจอ pattern เดิมซ้ำ ๆ → บอกว่าเป็น recurring issue พร้อมความถี่
+    ถ้าปกติ → ไม่ต้องรายงานอะไร"
+```
+
+**Pipeline การทำงาน:**
+1. Hermes cron trigger ทุก 30 นาที
+2. อ่าน `/var/log/app.log` เฉพาะบรรทัดใหม่ในช่วง 30 นาที
+3. Qwen 3.6 27B (local) วิเคราะห์ log patterns
+4. ถ้าพบปัญหา → สร้าง report + ส่ง notification
+5. บันทึกผลลง `/var/log/hermes-monitor.log`
+
+---
+
+### ข้อดีของ Hermes + Local LLM
+
+| ข้อดี | รายละเอียด |
+|-------|-----------|
+| 🔒 **Privacy 100%** | ทุกอย่างรันบนเครื่อง — โค้ด/log/secret ไม่หลุดออกนอกเครื่อง |
+| 💰 **ฟรี ไม่มีค่า API** | ใช้ local LLM ผ่าน Ollama — ไม่ต้องจ่ายต่อ token |
+| ⚡ **Latency ต่ำ** | ตอบกลับในวินาที — ไม่ต้องรอ network round-trip |
+| 🛠️ **Extensible** | เพิ่ม custom tools/plugins ได้เองตาม workflow |
+| 🔌 **Offline ได้** | ทำงานได้แม้ไม่มีอินเทอร์เน็ต — เหมาะกับ air-gapped environments |
+| 🎯 **Customizable** | ปรับแต่ง prompt, tools, schedule ให้ตรงกับทีม |
+
+---
+
+### เปรียบเทียบ: Hermes + Cloud LLM vs Local LLM
+
+| | **Cloud LLM** (DeepSeek V4, Claude Opus) | **Local LLM** (Qwen 3.6, DeepSeek R1) |
+|---|---|---|
+| 🔒 Privacy | ❌ ส่งข้อมูลออกนอกเครื่อง | ✅ 100% local — ปลอดภัยสูงสุด |
+| 💰 Cost | ❌ จ่ายต่อ token ($3-15/1M tokens) | ✅ ฟรี — ใช้ทรัพยากรเครื่องตัวเอง |
+| ⚡ Speed | ⚡⚡⚡ เร็ว (data center GPU) | ⚡⚡ เร็วพอใช้ (M5 ~20 tok/s) |
+| 🧠 Quality | 🏆 ดีที่สุดสำหรับงานซับซ้อนมาก | ดีมาก — เพียงพอสำหรับงาน DevOps ส่วนใหญ่ |
+| 📡 Offline | ❌ ต้องต่อเน็ต | ✅ ใช้ได้ทุกที่ |
+| 📏 Rate Limit | ❌ มี limit ต่อนาที/วัน | ✅ ไม่มี limit |
+| 🎛️ Control | ❌ ขึ้นอยู่กับผู้ให้บริการ | ✅ ควบคุมได้ 100% |
+
+> 💡 **แนะนำ:** ใช้ Local LLM (Qwen 3.6 27B) เป็น default สำหรับงานทั่วไป (review, logs, tests) — และ switch เป็น Cloud LLM เฉพาะงานที่ต้องการ reasoning สูงมาก ๆ เช่น deep algorithmic analysis
+
+---
+
 ## ⚡ MLX — Apple Native Acceleration
 
 MLX เป็น framework ของ Apple สำหรับรัน ML บน Apple Silicon — เร็วกว่า Ollama บางเคส
